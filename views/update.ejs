@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Update Image</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+ </head>
+<body>
+  <div class="container mt-4">
+    <h1 class="mb-4">Update Image</h1>
+    <form action="/update/<%= image._id %>?_method=PATCH" method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" class="form-control" id="name" name="name" value="<%= image.name %>">
+      </div>
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea class="form-control" id="description" name="description"><%= image.description %></textarea>
+      </div>
+      <div class="form-group">
+        <label for="ingredients">Ingredients:</label>
+        <table id="ingredients-table" class="table">
+          <thead>
+            <tr>
+              <th>Amount</th>
+              <th>Ingredient</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for (let i = 0; i < ingredients.length; i++) { %>
+              <tr>
+                <td><input type="text" class="form-control" name="amount[]" value="<%= amounts[i] %>" placeholder="e.g. 1 cup" required></td>
+                <td><input type="text" class="form-control" name="ingredient[]" value="<%= ingredients[i]%>" placeholder="e.g. flour" required></td>
+                <td><button type="button" class="btn btn-danger btn-sm remove-row"><i class="fa fa-trash"></i></button></td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+        <button type="button" class="btn btn-success btn-sm add-row"><i class="fa fa-plus"></i></button>
+        <small class="form-text text-muted">Enter ingredients and amounts for each row.</small>
+      </div>
+      <div class="form-group">
+        <label for="image">Image:</label>
+        <input type="file" class="form-control-file" id="image" name="image">
+      </div>
+      <div class="form-group">
+        <img src="data:<%= image.contentType %>;base64, <%= image.image.toString('base64') %>" alt="<%= image.name %>" class="img-thumbnail" style="max-width: 200px;">
+      </div>
+      <div class="form-group">
+        <label for="time">Time (in minutes):</label>
+        <input type="number" class="form-control" id="time" name="time" value="<%= image.time %>">
+      </div>
+      <div class="form-group">
+        <label for="process">Process:</label>
+        <textarea class="form-control" id="process" name="process"><%= image.process %></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+  </div>
+</body>
+<script>
+  $(document).ready(function() {
+  // Load ingredients from table to textarea
+  function loadIngredients() {
+    var ingredients = [];
+    $('#ingredients-table tbody tr').each(function() {
+      var amount = $(this).find('input[name="amount[]"]').val().trim();
+      var ingredient = $(this).find('input[name="ingredient[]"]').val().trim();
+      if (amount && ingredient) {
+        ingredients.push(amount + ' ' + ingredient);
+      }
+    });
+    $('#ingredients').val(ingredients.join('\n'));
+  }
+
+  // Add row to table
+  $('.add-row').click(function() {
+    var row = '<tr>' +
+              '<td><input type="text" class="form-control" name="amount[]" placeholder="e.g. 1 cup" required></td>' +
+              '<td><input type="text" class="form-control" name="ingredient[]" placeholder="e.g. flour" required></td>' +
+              '<td><button type="button" class="btn btn-danger btn-sm remove-row"><i class="fas fa-minus"></i></button></td>' +
+              '</tr>';
+    $('#ingredients-table tbody').append(row);
+  });
+
+  // Remove row from table
+  $('#ingredients-table').on('click', '.remove-row', function() {
+    $(this).closest('tr').remove();
+    loadIngredients();
+  });
+
+  // Update ingredients textarea on input change
+  $('#ingredients-table').on('input', 'input', function() {
+    loadIngredients();
+  });
+});
+
+</script>
+</html>

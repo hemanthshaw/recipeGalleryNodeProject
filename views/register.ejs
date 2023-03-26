@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Registration Page</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+  <style>
+    body {
+      padding-top: 50px;
+      padding-bottom: 20px;
+    }
+    .form-register {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .form-register-heading {
+      margin-bottom: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-label {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .form-control {
+      height: 40px;
+      font-size: 16px;
+    }
+    .btn-register {
+      font-size: 16px;
+      padding: 10px 20px;
+    }
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <form class="form-register" method="post" action="/auth/register">
+      <h2 class="form-register-heading">Please Register</h2>
+      <div class="form-group">
+        <label class="form-label" for="name">Name</label>
+        <input type="text" class="form-control" name="name" placeholder="Name" required autofocus>
+        <div class="error-message"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="email">Email</label>
+        <input type="email" class="form-control" name="email" placeholder="Email Address" required>
+        <div class="error-message"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="phoneNumber">Phone Number</label>
+        <input type="text" class="form-control" name="phoneNumber" placeholder="Phone Number" required>
+        <div class="error-message"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="country">Country</label>
+        <input type="text" class="form-control" name="country" placeholder="Country" required>
+        <div class="error-message"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input type="password" class="form-control" name="password" placeholder="Password" required>
+        <div class="error-message"></div>
+      </div>
+      <button class="btn btn-primary btn-block btn-register" type="submit">Register</button>
+    </form>
+  </div>
+
+  </body>
+
+  <script>
+    // Validate form inputs
+    const form = document.querySelector('.form-register');
+    form.addEventListener('submit', (event) => {
+      const nameInput = form.querySelector('[name="name"]');
+      const emailInput = form.querySelector('[name="email"]');
+      const phoneInput = form.querySelector('[name="phoneNumber"]');
+      const countryInput = form.querySelector('[name="country"]');
+      const passwordInput = form.querySelector('[name="password"]');
+
+      let isValid = true;
+
+      // Validate name
+      if (nameInput.value === '') {
+        nameInput.nextElementSibling.textContent = 'Please enter your name';
+        isValid = false;
+      } else {
+        nameInput.nextElementSibling.textContent = '';
+      }
+
+      // Validate email
+      if (emailInput.value === '') {
+        emailInput.nextElementSibling.textContent = 'Please enter your email address';
+        isValid = false;
+      } else if (!isValidEmail(emailInput.value)) {
+        emailInput.nextElementSibling.textContent = 'Please enter a valid email address';
+        isValid = false;
+      } else {
+        emailInput.nextElementSibling.textContent = '';
+      }
+
+      // Validate phone number
+      if (phoneInput.value === '') {
+        phoneInput.nextElementSibling.textContent = 'Please enter your phone number';
+        isValid = false;
+      } else if (!isValidPhoneNumber(phoneInput.value)) {
+        phoneInput.nextElementSibling.textContent = 'Please enter a valid phone number';
+        isValid = false;
+      } else {
+        phoneInput.nextElementSibling.textContent = '';
+      }
+
+      // Validate country
+      if (countryInput.value === '') {
+        countryInput.nextElementSibling.textContent = 'Please enter your country';
+        isValid = false;
+      } else {
+        countryInput.nextElementSibling.textContent = '';
+      }
+
+      // Validate password
+      if (passwordInput.value === '') {
+        passwordInput.nextElementSibling.textContent = 'Please enter your password';
+        isValid = false;
+      } else if (passwordInput.value.length < 8) {
+        passwordInput.nextElementSibling.textContent = 'Your password must be at least 8 characters long';
+        isValid = false;
+      } else {
+        passwordInput.nextElementSibling.textContent = '';
+      }
+
+      if (!isValid) {
+        event.preventDefault();
+      }
+    });
+
+    // Helper function to validate email address
+    function isValidEmail(email) {
+      const emailRegex = /^\S+@\S+\.\S+$/;
+      return emailRegex.test(email);
+    }
+
+    // Helper function to validate phone number
+    function isValidPhoneNumber(phoneNumber) {
+      const phoneRegex = /^\d{10}$/;
+      return phoneRegex.test(phoneNumber);
+    }
+  </script>
+</html>

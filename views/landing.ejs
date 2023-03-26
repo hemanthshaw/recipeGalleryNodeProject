@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Recipe.com</title>
+	<!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css" integrity="sha512-F7WyTLiiiPqvu2pGumDR15med0MDkUIo5VTVyyfECR5DZmCnDhti9q5VID02ItWjq6fvDfMaBaDl2J3WdL1uxA==" crossorigin="anonymous" />
+<style>
+  .card-img-top {
+  height: 300px;
+}
+</style>
+</head>
+
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Chef's Kitchen</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/about">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/contact">Contact</a>
+        </li>
+        <% if(user) {%>
+        <li class="nav-item">
+          <a class="nav-link" href="/auth/logout">Logout</a>
+        </li>
+        <li class="nav-item">
+          <p class="nav-link">Hello, <%= user.name %>!</p>
+        </li>
+        <%} else {%>
+        <li class="nav-item">
+          <a class="nav-link" href="/auth/login">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/auth/register">Signup</a>
+        </li>
+        <%}%>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h4 class="mb-4">Delight Your Tastebuds with Our Exquisite Recipes</h4>
+        <p class="text-muted">Our recipe website is dedicated to providing delicious and easy-to-follow recipes for people of all cooking levels. Come on in and explore our website - we're sure you'll find something that will make your taste buds sing!</p>
+        <a href="/images" class="btn btn-primary btn-sm">Discover Deliciousness</a>
+      </div>
+      <div class="col-md-6 mt-4 mt-md-0">
+        <img src="/images/food.jpg" class="img-fluid img-thumbnail" alt="Recipe Image" style="max-width: 75%; max-height: 75%;">
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Hero Section End -->
+
+
+<!-- Recipe Section -->
+<section class="recipe mt-5">
+    <div class="container">
+      <div class="row">
+  <!-- Recipe Cards -->
+  <div class="col-md-4 mb-4">
+    <div class="card">
+      <img src="/images/recipe-1.jpg" class="card-img-top" alt="Recipe Image"><div class="card-body">
+        <h5 class="card-title">Spaghetti Bolognese</h5>
+        <p class="card-text">Prep Time: 30 minutes</p>
+        <p class="card-text">Cook Time: 1 hour</p>
+        <p class="card-text">Serves: 4-6</p>
+        <a href="/images" class="btn btn-primary">More Recipes</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4 mb-4">
+    <div class="card">
+      <img src="/images/recipe-2.jpg" class="card-img-top" alt="Recipe Image"><div class="card-body">
+        <h5 class="card-title">Chicken Parmesan</h5>
+        <p class="card-text">Prep Time: 45 minutes</p>
+        <p class="card-text">Cook Time: 30 minutes</p>
+        <p class="card-text">Serves: 2-4</p>
+        <a href="/images" class="btn btn-primary">More Recipes</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4 mb-4">
+    <div class="card">
+      <img src="/images/recipe-3.jpg" class="card-img-top" alt="Recipe Image">
+      <div class="card-body">
+        <h5 class="card-title">Beef Stroganoff</h5>
+        <p class="card-text">Prep Time: 20 minutes</p>
+        <p class="card-text">Cook Time: 45 minutes</p>
+        <p class="card-text">Serves: 6-8</p>
+        <a href="/images" class="btn btn-primary">More Recipes</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- End Recipe Cards -->
+
+</div>
+</div>
+</section>
+
+
+
+<section class="about-section mt-5">
+  <div class="container">
+      <div class="row align-items-center">
+          <div class="col-md-6">
+              <h2 class="mb-4">About Us</h2>
+              <p class="text-muted">Our recipe website is dedicated to providing delicious and easy-to-follow recipes for people of all cooking levels. Whether you are a beginner or an experienced cook, our website has something for you.</p>
+              <p class="text-muted">We offer a wide variety of recipes ranging from quick and easy weeknight meals to decadent desserts and everything in between. Our recipes are carefully crafted and tested to ensure that they are both delicious and foolproof. We also provide helpful tips and tricks to make your cooking experience even better.</p>
+              <p class="text-muted">Our team of passionate foodies and experienced cooks is always working hard to bring you the best possible recipes and cooking advice. We believe that cooking should be fun and enjoyable for everyone, and we hope to inspire you to start experimenting in the kitchen and create your own culinary masterpieces.</p>
+          </div>
+          <div class="col-md-6">
+              <img src="https://images.unsplash.com/photo-1495546968767-f0573cca821e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHJlY2lwZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60" class="img-fluid" alt="About Us Image">
+          </div>
+      </div>
+  </div>
+</section>
+
+
+
+
+<footer class="bg-dark text-light py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 mb-3 mb-md-0">
+          <p class="mb-0">&copy; 2023 Your Company Name</p>
+        </div>
+        <div class="col-md-6">
+          <ul class="list-inline float-md-right mb-0">
+            <li class="list-inline-item"><a href="#" class="text-light">Privacy Policy</a></li>
+            <li class="list-inline-item"><a href="#" class="text-light">Terms of Use</a></li>
+            <li class="list-inline-item"><a href="#" class="text-light">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= recipe.name %> - Recipe</title>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <style>
+      /* Custom styles */
+      body {
+        font-family: Arial, sans-serif;
+      }
+      .recipe-image {
+        max-width: 100%;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Recipe App</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="/images">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/contact">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/images">Images</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container my-4">
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-4 text-center mb-4 mx-auto">
+              <img
+                class="recipe-image"
+                src="data:<%= recipe.image %>"
+                alt="<%= recipe.name %>"
+              />
+            </div>
+            <div class="col-md-8">
+              <h3><%= recipe.name %></h3>
+              <p><%= recipe.description %></p>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Ingredients</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% recipe.ingredients.forEach(function(ingredient) { %>
+                    <tr>
+                      <td><%= ingredient%></td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            <h4 style="font-family: Arial, sans-serif;">Instructions:</h4>
+            <p style="font-family: Arial, sans-serif;"><%= recipe.process %></p>
+            <div class="d-flex justify-content-end align-items-center">
+                <form class="like-form" action="/like/<%= recipe.id %>" method="post">
+                    <button type="submit" class="btn btn-light mr-2">
+                      <i class="fa fa-thumbs-up"></i> <span class="like-count"><%= recipe.likes %></span>
+                    </button>
+                  </form>
+              <% if(user && user.name === author.name) { %>
+                <form action="/delete/<%= recipe.id %>?_method=DELETE" method="post">
+                  <button type="submit" class="btn btn-danger mr-2"><i class="fa fa-trash"></i> Delete</button>
+                </form>
+                <form action="/update/<%= recipe.id %>?_method=UPDATE" method="get">
+                  <button type="submit" class="btn btn-primary mr-2">Update</button>
+                </form>
+              <% } else { %>
+                <p class="card-text">
+                  <span class="fw-bold">Chef Name:</span>
+                  <span class="text-primary"><%= author.name %></span>
+                </p>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

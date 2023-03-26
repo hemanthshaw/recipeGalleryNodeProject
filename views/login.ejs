@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+  <style>
+    @media (max-width: 768px) {
+  .card {
+    width: 90%;
+  }
+}
+
+@media (max-width: 576px) {
+  .card {
+    width: 100%;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+  }
+  .card-header {
+    background-color: transparent;
+    border-bottom: 1px solid #ccc;
+  }
+  .card-body {
+    padding: 10px;
+  }
+  .form-label {
+    font-size: 16px;
+  }
+  .form-control {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 576px) {
+  .card-header {
+    font-size: 32px;
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+    body {
+      padding-top: 50px;
+      padding-bottom: 20px;
+    }
+    .card {
+      margin-top: 20px;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .card-header {
+      background-color: #f2f2f2;
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      padding: 20px;
+      border-bottom: 1px solid #ccc;
+    }
+    .card-body {
+      padding: 20px;
+    }
+    .form-label {
+      font-weight: bold;
+    }
+    .form-control {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    .btn {
+      width: 100%;
+      margin-top: 20px;
+    }
+    .btn-link {
+      display: block;
+      margin-top: 10px;
+      text-align: center;
+    }
+    .logo {
+      display: block;
+      margin: 0 auto;
+      max-width: 200px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <img class="logo" src="https://t4.ftcdn.net/jpg/02/65/58/29/360_F_265582946_D57tH8k6p377flQrhptz93w9bK9CN6AR.jpg" alt="Mongo Atlas Login">
+        Login
+      </div>
+      <div class="card-body">
+        <form class="form-signin" method="post" action="/auth/login">
+          <div class="form-group">
+            <label for="email" class="form-label">Email Address</label>
+            <input type="email" class="form-control" name="email" id="email" required autofocus>
+          </div>
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" name="password" id="password" required>
+          </div>
+          <button class="btn btn-primary" type="submit">Sign in</button>
+        </form>
+        <a href="/auth/register" class="btn btn-link">Register</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Add animation when form is submitted
+      $('form').submit(function() {
+        $('.card-body').animate({opacity: 0.5}, 500);
+      });
+
+      // Add animation when form is successfully submitted
+      $('#login-form').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+          type: 'POST',
+          url: '/auth/login',
+          data: $('#login-form').serialize(),
+          success: function(data) {
+            $('.card-body').animate({opacity: 1}, 500);
+            $('form').trigger("reset");
+            // Show success message
+            $('.alert-success').removeClass('d-none');
+          },
+          error: function(data) {
+            $('.card-body').animate({opacity: 1}, 500);
+            // Show error message
+            $('.alert-danger').removeClass('d-none');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
+

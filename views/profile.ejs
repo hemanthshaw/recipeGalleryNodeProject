@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Recipes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    table {
+  margin: 0 auto;
+  max-width: 500px;
+}
+
+.card {
+  max-width: 300px;
+}
+
+.card-img-top {
+  object-fit: cover;
+  height: 200px;
+  width: 100%;
+}
+
+.card-text {
+  height: 50px;
+  overflow: hidden;
+}
+
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand ml-auto" href="/images">Chef's Recipes</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/upload">Upload</a>
+        </li>
+      </ul>
+      <form action="/search" method="get" class="form-inline my-2 my-lg-0 mx-auto">
+        <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search by name" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+      <ul class="navbar-nav ml-auto">
+        <% if(user) {%>
+
+        <li class="nav-item">
+          <p class="nav-link">Logged in as <%= user.name %></p>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/auth/logout">Logout</a>
+        </li>
+        <%} else {%>
+        <li class="nav-item">
+          <a class="nav-link" href="/auth/login">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/auth/register">Signup</a>
+        </li>
+        <%}%>
+      </ul>
+    </div>
+  </nav>
+  <div class="container my-4">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <h2 class="text-center mb-4" style="font-family: 'Montserrat', sans-serif; font-weight: 700; letter-spacing: 2px; color: #333;">Personal Information</h2>
+        <table class="table table-bordered table-striped" style="font-family: 'Open Sans', sans-serif;">
+          <tbody>
+            <tr>
+              <th style="width: 30%; font-weight: 600;">Name:</th>
+              <td><%= user.name %></td>
+            </tr>
+            <tr>
+              <th style="font-weight: 600;">Email:</th>
+              <td><%= user.email %></td>
+            </tr>
+            <tr>
+              <th style="font-weight: 600;">Country:</th>
+              <td><%= user.country %></td>
+            </tr>
+            <tr>
+              <th style="font-weight: 600;">Phone Number:</th>
+              <td><%= user.phoneNumber %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container my-4">
+    <h2 class="text-center mb-4">Kitchen Adventures</h2>
+    <% if (recipes.length > 0) { %>
+    <div class="row justify-content-center">
+      <% recipes.forEach(function(recipe) { %>
+      <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+        <div class="card h-100">
+          <img class="card-img-top" src="<%=recipe.image %>" alt="Card image cap" style="object-fit: cover; height: 200px;">
+          <div class="card-body">
+            <h5 class="card-title"><%= recipe.name %></h5>
+            <p class="card-text"><%= recipe.description.substring(0,100)+'...' %></p>
+            <p class="card-text">Time: <%= recipe.time %> mins</p>
+            <p class="card-text"><%= recipe.process.substring(0,100)+ '...' %></p>
+            <div class="d-flex justify-content-center mt-3">
+              <a href="/recipe/<%= recipe.id %>" class="btn btn-primary btn-sm">Read More</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+    <% } else { %>
+    <p>No recipes found.</p>
+    <% } %>
+  </div>
+
+
+</body>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</html>

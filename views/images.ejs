@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Recipes</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ <style>
+    .like-form button {
+      background-color: #f2f2f2;
+      border: none;
+    }
+    .like-form button:hover {
+      background-color: #e6e6e6;
+    }
+    .card {
+      width: 300px;
+      height: 500px;
+      margin-bottom: 20px;
+    }
+    .card img {
+      height: 300px;
+      object-fit: cover;
+    }
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    z-index: 1;
+    display: none;
+  }
+
+  .dropdown:hover .dropdown-menu {
+    display: block;
+  }
+
+  .dropdown-item {
+    display: block;
+    padding: 0.25rem 1.5rem;
+    clear: both;
+    font-weight: 400;
+    color: #212529;
+    text-align: inherit;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+  }
+
+  .dropdown-item:hover {
+    color: #fff;
+    background-color: #007bff;
+  }
+
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand ml-auto" href="/images">Chef's Recipes</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/images">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/upload">Upload</a>
+        </li>
+      </ul>
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Sort by:
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="#" data-value="name_asc">name (A-Z)</a>
+          <a class="dropdown-item" href="#" data-value="name_desc">name (Z-A)</a>
+          <a class="dropdown-item" href="#" data-value="like_desc">likes (high-low)</a>
+        </div>
+      </div>
+      <form action="/search" method="get" class="form-inline my-2 my-lg-0 mx-auto">
+        <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search by name" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+      <ul class="navbar-nav ml-auto">
+        <% if(user) {%>
+          <li class="nav-item">
+            <a class="nav-link" href="/user-images/<%=user._id %>">Know Your self</a>
+          </li>
+
+        <li class="nav-item">
+          <p class="nav-link">Hello <%= user.name %>!</p>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/auth/logout">Logout</a>
+        </li>
+        <%} else {%>
+        <li class="nav-item">
+          <a class="nav-link" href="/auth/login">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/auth/register">Signup</a>
+        </li>
+        <%}%>
+      </ul>
+    </div>
+  </nav>
+  <div class="container mt-4">
+    <h2 class="text-center mb-4">Cook up a storm with our recipe collection</h2>
+    <p class="text-center mb-5">Discover our compilation of delicious recipes, created and tested in our kitchen.</p>
+    <% if (recipes.length > 0) { %>
+    <div class="row row-cols-1 row-cols-md-3">
+        <% recipes.forEach(function(recipe) { %>
+        <div class="col mb-4">
+            <div class="card h-100">
+                <img class="card-img-top" src="<%=recipe.image %>" alt="Card image cap" style="object-fit: cover; height: 250px;">
+                <div class="card-body">
+                    <h5 class="card-title"><%= recipe.name %></h5>
+                    <p class="card-text"><%= recipe.description.substring(0,100)+'...' %></p>
+                    <p class="card-text">Time: <%= recipe.time %> mins</p>
+                    <p class="card-text"><%= recipe.process.substring(0,100)+ '...' %></p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <a href="/recipe/<%= recipe.id %>" class="btn btn-primary btn-sm">Read More</a>
+                        <form class="like-form" data-recipe-id="<%= recipe.id %>">
+                          <button type="button" class="btn btn-light like-btn">
+                              <i class="fa fa-thumbs-up"></i> <span class="like-count"><%= recipe.likes %></span>
+                          </button>
+                      </form>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }); %>
+    </div>
+    <% } else { %>
+    <p>No recipes found.</p>
+    <% } %>
+</div>
+</body>
+
+<script>
+
+$(document).ready(function() {
+    $(".dropdown-menu a").click(function() {
+      var sortType = $(this).data("value");
+      window.location.href = "/sort-images/" + sortType;
+    });
+  });
+
+// Handle click event on like button
+$('.like-btn').click(function() {
+  // Get the recipe ID from the data attribute
+  var recipeId = $(this).parent().data('recipe-id');
+  // Get the current like count from the UI
+  var likeCount = $('.like-form[data-recipe-id="' + recipeId + '"] .like-count');
+  var currentLikes = parseInt(likeCount.text());
+  // Send a POST request to update the like count in the database
+  $.ajax({
+    url: '/like/' + recipeId,
+    method: 'POST',
+    success: function(data) {
+      // Update the like count on the client side
+      console.log(data);
+      likeCount.text(data.likes);
+    },
+    error: function() {
+      // If the POST request fails, revert the UI to the previous state
+      likeCount.text(currentLikes);
+    }
+  });
+});
+
+
+
+</script>
+</html>
