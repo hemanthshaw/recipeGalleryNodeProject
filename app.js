@@ -13,9 +13,9 @@ const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 
 
-
+const mangoUrl = 'configuration-endpoint';
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://root:root@recipe.4mg0eaj.mongodb.net/?retryWrites=true&w=majority', { useNewUrlParser: true })
+mongoose.connect(mangoUrl, { useNewUrlParser: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
