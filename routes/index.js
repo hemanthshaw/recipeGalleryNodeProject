@@ -36,7 +36,7 @@ router.get('/', (req, res) => {
       const images = await Image.find();
       const imagesData = await Promise.all(images.map(async (image) => {
           const author = await User.findById(image.userId);
-          const ingredients = image.ingredients.map(ingredient => ingredient.replace(/,/g, ' '));
+          const ingredients = image.ingredients.map(ingredient => ingredient.replace(/@/g, ' '));
           return {
             id :  image._id,
             name: image.name,
@@ -73,7 +73,7 @@ router.post('/upload',ensureAuthenticated,upload.single('image'), async (req, re
 
   // Combine amount and ingredient into an array of strings
   var recipe = amounts.map(function(amount, index) {
-    return amount + ',' + ingredients[index];
+    return amount + '@' + ingredients[index];
   });
     const image = new Image({
       name: req.body.name,
@@ -100,7 +100,8 @@ router.get('/recipe/:id', ensureAuthenticated, async (req, res) => {
     try {
       const image = await Image.findById(req.params.id);
       const author = await User.findById(image.userId);
-      const ingredients = image.ingredients.map((ingredient) => ingredient.replace(/,/g, ' '));
+      const ingredients = image.ingredients.map((ingredient) => ingredient.replace(/@/g, ' '));
+      console.log(ingredients);
       const recipe = {
         id: image._id,
         name: image.name,
@@ -135,8 +136,8 @@ router.delete('/delete/:id',ensureAuthenticated, async (req, res) => {
 router.get('/update/:id',ensureAuthenticated, async (req, res) => {
     try {
       const image = await Image.findById(req.params.id);
-      const ingredientsArray = image.ingredients.map(ingredient => ingredient.split(','));
-      console.log(ingredientsArray);
+      console.log(image.ingredients);
+      const ingredientsArray = image.ingredients.map(ingredient => ingredient.split('@'));
       const amounts = ingredientsArray.map(ingredient => ingredient[0].trim());
       const ingredients = ingredientsArray.map(ingredient => ingredient[1].trim());
       res.render('update', { image : image, amounts: amounts, ingredients: ingredients });
@@ -156,7 +157,7 @@ router.patch('/update/:id',ensureAuthenticated, upload.single('image'), async (r
 
   // Combine amount and ingredient into an array of strings
   var recipe = amounts.map(function(amount, index) {
-    return amount + ' ' + ingredients[index];
+    return amount + '@' + ingredients[index];
   });
       const updatedImage = {
         name,
