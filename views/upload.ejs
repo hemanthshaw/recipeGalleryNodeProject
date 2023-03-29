@@ -18,7 +18,7 @@
 <body>
   <div class="container mt-4">
     <h1 class="mb-4">Recipe Form</h1>
-    <form action="/upload" method="post" enctype="multipart/form-data">
+    <form id="recipe-form" action="/upload" method="post" enctype="multipart/form-data">
       <div class="form-group">
         <label for="name">Recipe Name:</label>
         <input type="text" class="form-control" id="name" name="name" placeholder="Enter recipe name" required>
@@ -29,6 +29,7 @@
       </div>
       <div class="form-group">
         <label for="image">Image:</label>
+        <small class="form-text text-muted">(PNG, JPEG, JPG only):</small>
         <input type="file" class="form-control-file" id="image" name="image" required>
       </div>
       <div class="form-group">
@@ -66,50 +67,67 @@
   </div>
 </body>
 <script>
-  $(document).ready(function() {
-    $('#recipe-form').submit(function(event) {
-      var image = $('#image').val();
-      var imageExtensions = /(\.jpeg|\.jpg|\.png)$/i;
-      var maxFileSize = 5 * 1024 * 1024; // 5MB
-      var ingredients = $('#ingredients-table tbody tr').length;
 
-      // Validate image
-      if (!imageExtensions.exec(image)) {
-        alert('Please select an image file of type JPEG or PNG.');
-        event.preventDefault();
-        return;
-      }
+$(document).ready(function() {
+  $('#recipe-form').submit(function(event) {
+    var image = $('#image').val();
+    var imageExtensions = /(\.jpeg|\.jpg|\.png)$/i;
+    var maxFileSize = 5 * 1024 * 1024; // 5MB
+    var ingredients = $('#ingredients-table tbody tr').length;
 
-      if ($('#image')[0].files[0].size > maxFileSize) {
-        alert('File size exceeds 5MB.');
-        event.preventDefault();
-        return;
-      }
-
-      // Validate ingredients
-      if (ingredients == 0) {
-        alert('Please add at least one ingredient.');
-        event.preventDefault();
-        return;
-      }
-
-      // Validate process
-      var process = $('#process').val().trim();
-      if (process == '') {
-        alert('Please enter recipe process.');
-        event.preventDefault();
-        return;
-      }
-      var processSteps = process.split('\n');
-      if (processSteps.length < 2) {
-        alert('Please enter recipe process with at least 2 steps.');
-        event.preventDefault();
-        return;
-      }
-
-      // Validation successful, submit the form
+    // Validate image
+    if (!imageExtensions.exec(image)) {
+      alert('Please select an image file of type JPEG or PNG.');
+      event.preventDefault();
       return;
-    });
+    }
+
+    if ($('#image')[0].files[0].size > maxFileSize) {
+      alert('File size exceeds 5MB.');
+      event.preventDefault();
+      return;
+    }
+
+    // Validate ingredients
+    if (ingredients == 0) {
+      alert('Please add at least one ingredient.');
+      event.preventDefault();
+      return;
+    }
+
+    // Validate time
+    var time = $('#time').val().trim();
+    var timeRegex = /^(\d+)\s*(?:minutes?)?$/i; // regex to match pattern of digits followed by "minute(s)"
+    var match = time.match(timeRegex);
+    if (!match) {
+      alert('Please enter time in minutes.');
+      event.preventDefault();
+      return;
+    }
+
+
+
+
+    // Validate process
+    var process = $('#process').val().trim();
+    if (process == '') {
+      alert('Please enter recipe process.');
+      event.preventDefault();
+      return;
+    }
+
+    var processSteps = process.split('\n');
+    if (processSteps.length < 2) {
+      alert('Please enter recipe process with at least 2 steps.');
+      event.preventDefault();
+      return;
+    }
+
+    // Validation successful, submit the form
+    var timeInMinutes = parseInt(match[1]);
+    $('#time').val() = timeInMinutes;
+    return;
+  });
 
     // Add row to ingredients table
     $('.add-row').click(function() {

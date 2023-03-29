@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= recipe.name %> - Recipe</title>
     <!-- Bootstrap CSS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -91,11 +93,11 @@
             <h4 style="font-family: Arial, sans-serif;">Instructions:</h4>
             <p style="font-family: Arial, sans-serif;"><%= recipe.process %></p>
             <div class="d-flex justify-content-end align-items-center">
-                <form class="like-form" action="/like/<%= recipe.id %>" method="post">
-                    <button type="submit" class="btn btn-light mr-2">
-                      <i class="fa fa-thumbs-up"></i> <span class="like-count"><%= recipe.likes %></span>
-                    </button>
-                  </form>
+              <form class="like-form" data-recipe-id="<%= recipe.id %>">
+                <button type="button" class="btn btn-light like-btn">
+                    <i class="fa fa-thumbs-up"></i> <span class="like-count"><%= recipe.likes %></span>
+                </button>
+                </form>
               <% if(user && user.name === author.name) { %>
                 <form action="/delete/<%= recipe.id %>?_method=DELETE" method="post">
                   <button type="submit" class="btn btn-danger mr-2"><i class="fa fa-trash"></i> Delete</button>
@@ -116,4 +118,31 @@
     </div>
   </div>
 </body>
+<script>
+  
+$(document).ready(function() {
+// Handle click event on like button
+$('.like-btn').click(function() {
+  // Get the recipe ID from the data attribute
+  var recipeId = $(this).parent().data('recipe-id');
+  // Get the current like count from the UI
+  var likeCount = $('.like-form[data-recipe-id="' + recipeId + '"] .like-count');
+  var currentLikes = parseInt(likeCount.text());
+  // Send a POST request to update the like count in the database
+  $.ajax({
+    url: '/like/' + recipeId,
+    method: 'POST',
+    success: function(data) {
+      // Update the like count on the client side
+      console.log(data);
+      likeCount.text(data.likes);
+    },
+    error: function() {
+      // If the POST request fails, revert the UI to the previous state
+      likeCount.text(currentLikes);
+    }
+  });
+});
+});
+</script>
 </html>

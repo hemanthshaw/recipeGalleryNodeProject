@@ -67,12 +67,8 @@ router.post('/upload',ensureAuthenticated,upload.single('image'), async (req, re
   try {
     const imageBuffer = req.file.buffer;
     const resizedImage = await sharp(imageBuffer).resize(300,300).jpeg({ quality: 100 }).toBuffer();
-    const allowedMimeTypes = ['image/jpeg'];
-
-if (!allowedMimeTypes.includes(req.file.mimetype)) {
-  throw new Error('Invalid file type. Only JPEG files are allowed.');
-}
-var amounts = req.body.amount;
+ 
+   var amounts = req.body.amount;
   var ingredients = req.body.ingredient;
 
   // Combine amount and ingredient into an array of strings
@@ -273,6 +269,12 @@ router.get('/user-images/:userId', ensureAuthenticated, async (req, res) => {
 });
 
 
+router.get('/contact', async (req, res) => {
+  const message = "Welcome to the contact page!";
+  res.render('contact', { message });
+});
+
+
   // POST route to store analytics or issues data in database
   router.post('/contact', async (req, res) => {
     try {
@@ -284,10 +286,8 @@ router.get('/user-images/:userId', ensureAuthenticated, async (req, res) => {
 
       // Save the analytics document to the database
       await analytics.save();
-
       // Send a success response to the client with a flash message
-      req.flash('success', 'Your message has been submitted successfully.');
-      res.render('contact', { successMessage: req.flash('success') });
+      res.render('contact', {message});
 
     } catch (err) {
       // Send an error response to the client
